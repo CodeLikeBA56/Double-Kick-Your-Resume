@@ -1,0 +1,196 @@
+"use client";
+import axios from 'axios';
+import { auth } from '@/lib/firebase';
+import React, { useState } from 'react';
+import styles from './SignUp.module.css';
+import Navigation from '../../components/Navigation';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+
+const SignUp = () => {
+  const [email, setEmail] = useState("211400068@gift.edu.pk");
+  const [username, setUsername] = useState("Sameer Shamshad");
+  const [password, setPassword] = useState("1234567");
+  const [confirmPassword, setConfirmPassword] = useState("1234567");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRegisterUser = async (e) => {
+    e.preventDefault();
+    
+    if (!email.trim() || !username.trim() || !password.trim() || !confirmPassword.trim()) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    if (password.length < 7) {
+      alert("Password must be at least 7 characters long.");
+      return;
+    }
+
+    setIsLoading(true);
+    const body = { email, username, password };
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      body.uid = user.uid;
+
+      const response = await axios.post('/api/auth/register', body);
+      
+      if (200 === response.status) {
+        await sendEmailVerification(user, { 
+          handleCodeInApp: true,
+          url: `${process.env.NEXT_PUBLIC_API_URL}sign-in/?email=${encodeURIComponent(user.email)}`, 
+        });
+
+        // Display custom built alert here.
+        // const { type, message } = response.data;
+
+        alert("Email verification link has been sent to your mail.");
+        // showAlert("info", "Email verification link has been sent to your mail.");
+      }
+    } catch (error) {
+      if (error.code) {
+        // switch (error.code) {
+        //   case "auth/email-already-in-use":
+        //     showAlert("error", "This email is already in use.");
+        //     break;
+        //   case "auth/invalid-email":
+        //     showAlert("error", "Please provide a valid email.");
+        //     break;
+        //   case "auth/weak-password":
+        //     showAlert("error", "The password must be 7 characters long.");
+        //     break;
+        //   case "auth/operation-not-allowed":
+        //     showAlert("error", "This operation is not allowed.");
+        //     break;
+        //   case "auth/network-request-failed":
+        //     showAlert("error", "Please check your internet connection.");
+        //     break;
+        //   case "auth/too-many-requests":
+        //     showAlert("error", "Too many attempts. Please try again later.");
+        //     break;
+        //   default:
+        //     showAlert("error", "An unexpected error occurred. Please try again later.");
+        //     break;
+        // }
+        console.error("Error signing up:", error.response?.data?.message || error.message);
+    } else {
+        console.error("Error signing up:", error.response?.data?.message || error.message);
+        // showAlert("error", error.response?.data?.message || "An error occurred. Please try again.");
+    }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <div className='w-screen h-screen relative'>
+      <Navigation />
+      <form className={`${styles.form} mt-20`} onSubmit={handleRegisterUser}>
+        <header className={styles.header}>Sign Up</header>
+
+        {/* Username */}
+        <div className={styles.field}>
+          <label>Username</label>
+
+          <div className='icon-field'>
+            <input
+              required
+              type="text"
+              value={username}
+              className='form-input'
+              onChange={e => setUsername(e.target.value)}
+            />
+
+            <span className='material-symbols-outlined input-validity-check'>check</span>
+          </div>
+        </div>
+
+        {/* Email */}
+        <div className={styles.field}>
+          <label>Email</label>
+
+          <div className='icon-field'>
+            <input
+              required
+              type="email"
+              value={email}
+              className='form-input'
+              onChange={e => setEmail(e.target.value)}
+            />
+            <span className='material-symbols-outlined input-validity-check'>check</span>
+          </div>
+        </div>
+
+        {/* Password */}
+        <div className={styles.field}>
+          <label>Password</label>
+          
+          <div className='icon-field'>
+            <input
+              required
+              minLength={7}
+              value={password}
+              className='form-input'
+              type={showPassword ? "text" : "password"}
+              onChange={e => setPassword(e.target.value)}
+            />
+
+            <button type='button' className={styles['show-pass-btn']} onClick={() => setShowPassword(!showPassword)}>
+              <span className="material-symbols-outlined">{showPassword ? "visibility" : "visibility_off"}</span>
+            </button>
+
+            <span className='material-symbols-outlined input-validity-check'>check</span>
+          </div>
+
+        </div>
+
+        {/* Confirm Password */}
+        <div className={styles.field}>
+          <label>Confirm Password</label>
+
+          <div className='icon-field'>
+            <input
+              required
+              minLength={7}
+              className='form-input'
+              value={confirmPassword}
+              type={showConfirmPassword ? "text" : "password"}
+              onChange={e => setConfirmPassword(e.target.value)}
+            />
+
+
+            <button type='button' className={styles['show-pass-btn']} onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+              <span className="material-symbols-outlined">{showConfirmPassword ? "visibility" : "visibility_off"}</span>
+            </button>
+            
+            {
+              password === confirmPassword &&
+              <span className='material-symbols-outlined input-validity-check'>check</span>
+            }
+          </div>
+
+          <p className='show-error'>
+            {password && password.length < 7 && "Password must be at least 7 characters long."}
+            {password.length > 6 && password.trim() && confirmPassword.trim() && password !== confirmPassword &&
+              "Both Password and confirm password should match."}
+          </p>
+        </div>
+
+        {/* Submit */}
+        <button type="submit" className={styles.submitBtn} disabled={isLoading}>Sign Up</button>
+      </form>
+    </div>
+  );
+};
+
+export default SignUp;

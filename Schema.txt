@@ -1,0 +1,23 @@
+users/{userId} -> {
+  username, email, profilePic, createdAt
+}
+
+cvs/{cvId} -> {
+  userId,  // owner
+  title, summary, socialLinks, 
+  sections: {
+    education: [eduId...],
+    experience: [expId...],
+    projects: [projId...],
+    skills: [skillId...]
+  },
+  createdAt, updatedAt
+}
+
+education/{eduId} -> {
+  cvId, degree, institute, startYear, endYear
+}
+
+experience/{expId} -> {
+  cvId, company, role, startDate, endDate
+}

@@ -1,0 +1,26 @@
+import { auth, db } from "@/lib/firebaseAdmin";
+
+export async function POST(req) {
+  const { uid, username, email } = await req.json();
+
+  if (!username || !email || !uid)
+    return new Response("Please fill in all fields!", { status: 400 });
+
+  try {
+    // 1. Check if user exists before pushing user profile to the Firestore.
+    const userDoc = await db.collection("users").doc(uid).get();
+    console.log(userDoc);
+
+    if (userDoc.exists)
+      return new Response("User already exists", { status: 400 });
+
+    // 2. Create Firestore user profile
+    await db.collection("users").doc(uid).set({ 
+      username, email, profileUrl: "", createdAt: new Date(), updatedAt: new Date(),
+    });
+
+    return Response.json({ success: true });
+  } catch (error) {
+    return new Response(error.message, { status: 500 });
+  }
+}

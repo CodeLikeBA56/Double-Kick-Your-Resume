@@ -1,26 +1,187 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
+:root { /* Light theme variables */
+  --background: #fdfdfd;
   --foreground: #171717;
+  --text-color: #333333;
+  --main-color: #754ef9;
+  --white-color: #fdfdfd;
+  --border-color: #555555;
+  --shadow-color: rgba(0, 0, 0, .2);
 }
 
-@theme inline {
+@theme inline { /* Map CSS vars to Tailwind theme tokens */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-text-color: var(--text-color);
+  --color-main-color: var(--main-color);
+  --color-white-color: var(--white-color);
+  --color-border-color: var(--border-color);
+  --color-shadow-color: var(--shadow-color);
+
+  /* Colors defined for CV's */
+  --color-primary-bg-color: var(--primary-bg-color);
+  --color-primary-main-color: var(--primary-main-color);
+  --color-primary-text-color: var(--primary-text-color);
+
+  --color-secondary-bg-color: var(--secondary-bg-color);
+  --color-secondary-main-color: var(--secondary-main-color);
+  --color-secondary-text-color: var(--secondary-text-color);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) { /* Dark theme overrides /
   :root {
     --background: #0a0a0a;
+    --background: #0b061f;
     --foreground: #ededed;
+    --text-color: #fdfdfd;
+    --shadow-color: rgba(0, 0, 0, .7);
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.dark-mode {
+  --background: #0b061f;
+  --foreground: #ededed;
+  --text-color: #fdfdfd;
+  --shadow-color: rgba(0, 0, 0, .7);
+}
+
+button {
+  min-width: 45px;
+  height: 45px;
+  border: none;
+  outline: none;
+  gap: 5px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  height: 40px;
+  outline: none;
+  font-size: 14px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid var(--shadow-color);
+}
+
+textarea {
+  resize: none;
+  outline: none;
+  font-size: 14px;
+  min-height: 80px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--shadow-color);
+}
+
+input:focus, textarea:focus {
+  border-color: var(--text-color);
+}
+
+.icon-field {
+  display: flex;
+  position: relative;
+}
+
+.form-input ~ .input-validity-check, .icon-field .form-input ~ .input-validity-check {
+  opacity: 0;
+  position: absolute;
+}
+
+.form-input:valid ~ .input-validity-check {
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
+  left: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--main-color);
+  opacity: 1;
+  transition: opacity .3s ease;
+}
+
+.form-input:focus ~ .input-validity-check {
+  opacity: 0;
+}
+
+.show-error {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 500;
+  height: 20px;
+  visibility: visible;
+  color: var(--border-color);
+  transition: opacity .3s ease;
+}
+
+.logo {
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.small-logo {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.mobile-logo {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+i {
+  font-size: 20px;
+}
+
+/* Balls DNA type Movement */
+
+.ball {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--main-color);
+  animation: bounce 1s infinite;
+}
+
+.ball:nth-child(1) { animation-delay: 0.1s; }
+.ball:nth-child(2) { animation-delay: 0.2s; }
+.ball:nth-child(3) { animation-delay: 0.22s; }
+.ball:nth-child(4) { animation-delay: 0.24s; }
+.ball:nth-child(5) { animation-delay: 0.26s; }
+.ball:nth-child(6) { animation-delay: 0.28s; }
+.ball:nth-child(7) { animation-delay: 0.30s; }
+.ball:nth-child(8) { animation-delay: 0.7s; }
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-50px);
+  }
+  100% {
+    transform: translateY(50px);
+  }
 }
