@@ -1,9 +1,10 @@
 "use client";
 import axios from 'axios';
+import Link from 'next/link';
 import { auth } from '@/lib/firebase';
 import React, { useState } from 'react';
-import styles from './SignUp.module.css';
-import Navigation from '../../components/Navigation';
+import styles from '../auth.module.css';
+import Navigation from '../../../components/Navigation';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 const SignUp = () => {
@@ -187,7 +188,8 @@ const SignUp = () => {
         </div>
 
         {/* Submit */}
-        <button type="submit" className={styles.submitBtn} disabled={isLoading}>Sign Up</button>
+        <button type="submit" className={styles["sign-up-btn"]} disabled={isLoading}>{isLoading ? "Registering..." : "Register"}</button>
+        <Link className={styles['sign-in-form-link']} href="/sign-in">Already have an account? Sign-in</Link>
       </form>
     </div>
   );

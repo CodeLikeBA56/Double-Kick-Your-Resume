@@ -52,7 +52,7 @@ body {
   --background: #0b061f;
   --foreground: #ededed;
   --text-color: #fdfdfd;
-  --shadow-color: rgba(0, 0, 0, .7);
+  --shadow-color: rgba(255, 255, 255, .2);
 }
 
 button {
@@ -68,6 +68,7 @@ button {
 }
 
 label {
+  /* padding-left: 15px; */
   font-size: 14px;
   font-weight: 600;
 }
@@ -77,8 +78,8 @@ input {
   height: 40px;
   outline: none;
   font-size: 14px;
-  padding: 0 10px;
-  border-radius: 6px;
+  padding: 0 15px;
+  border-radius: 50px;
   border: 1px solid var(--shadow-color);
 }
 
@@ -111,8 +112,7 @@ input:focus, textarea:focus {
   height: 20px;
   font-size: 18px;
   left: -25px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: -22px;
   display: flex;
   align-items: center;
   justify-content: center;
