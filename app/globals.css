@@ -6,8 +6,8 @@
   --text-color: #333333;
   --main-color: #754ef9;
   --white-color: #fdfdfd;
-  --border-color: #555555;
-  --shadow-color: rgba(0, 0, 0, .2);
+  --border-color: rgba(0, 0, 0, .2);
+  --shadow-color: rgba(0, 0, 0, .1);
 }
 
 @theme inline { /* Map CSS vars to Tailwind theme tokens */
@@ -52,6 +52,7 @@ body {
   --background: #0b061f;
   --foreground: #ededed;
   --text-color: #fdfdfd;
+  --border-color: rgba(255, 255, 255, .2);
   --shadow-color: rgba(255, 255, 255, .2);
 }
 

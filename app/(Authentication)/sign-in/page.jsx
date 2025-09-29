@@ -48,7 +48,7 @@ const SignIn = () => {
     <div className='w-screen h-screen relative'>
       <Navigation />
       <form className={`${styles["sign-in-form"]} mt-20`} onSubmit={handleRegisterUser}>
-        <header className={styles.header}>Sign In</header>
+        <header className={styles.header}>Login</header>
 
         {/* Email */}
         <div className={styles.field}>

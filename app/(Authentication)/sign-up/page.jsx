@@ -8,10 +8,10 @@ import Navigation from '../../../components/Navigation';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 const SignUp = () => {
-  const [email, setEmail] = useState("211400068@gift.edu.pk");
-  const [username, setUsername] = useState("Sameer Shamshad");
-  const [password, setPassword] = useState("1234567");
-  const [confirmPassword, setConfirmPassword] = useState("1234567");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -97,7 +97,7 @@ const SignUp = () => {
     <div className='w-screen h-screen relative'>
       <Navigation />
       <form className={`${styles.form} mt-20`} onSubmit={handleRegisterUser}>
-        <header className={styles.header}>Sign Up</header>
+        <header className={styles.header}>Create an account</header>
 
         {/* Username */}
         <div className={styles.field}>
@@ -108,6 +108,7 @@ const SignUp = () => {
               required
               type="text"
               value={username}
+              placeholder='John Doe'
               className='form-input'
               onChange={e => setUsername(e.target.value)}
             />
@@ -124,6 +125,7 @@ const SignUp = () => {
             <input
               required
               type="email"
+              placeholder='123@example.com'
               value={email}
               className='form-input'
               onChange={e => setEmail(e.target.value)}
