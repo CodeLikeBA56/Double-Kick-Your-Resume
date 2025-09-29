@@ -1,8 +1,9 @@
 "use client";
+import axios from 'axios';
+import Link from 'next/link';
 import React, { useState } from 'react'
 import styles from '../auth.module.css';
 import Navigation from '../../../components/Navigation';
-import Link from 'next/link';
 
 const SignIn = () => {
   const [email, setEmail] = useState("211400068@gift.edu.pk");
@@ -22,23 +23,22 @@ const SignIn = () => {
     setIsLoading(true);
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      body.uid = user.uid;
-
-      const response = await axios.post('/api/auth/sign-in', { email, password });
+      const response = await axios.post('/api/auth/login', { email, password });
       
       if (200 === response.status) {
+        const { type, message, user } = response.data;
+        console.log(type, message);
+        console.table(user);
 
-        // Display custom built alert here.
-        // const { type, message } = response.data;
-
-        alert("Email verification link has been sent to your mail.");
+        alert("Logged in successfylly.");
         // showAlert("info", "Email verification link has been sent to your mail.");
+
+        setEmail("");
+        setPassword("");
       }
     } catch (error) {
-        console.error("Error signing up:", error.response?.data?.message || error.message);
-        // showAlert("error", error.response?.data?.message || "An error occurred. Please try again.");
+      const { type, message } = error.response.data;
+      console.log(type, message);
     } finally {
       setIsLoading(false);
     }
@@ -58,6 +58,7 @@ const SignIn = () => {
             required
             type="email"
             value={email}
+            inputMode='email'
             className='form-input'
             onChange={e => setEmail(e.target.value)}
           />

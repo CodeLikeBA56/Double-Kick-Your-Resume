@@ -57,6 +57,11 @@ const SignUp = () => {
 
         alert("Email verification link has been sent to your mail.");
         // showAlert("info", "Email verification link has been sent to your mail.");
+        
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
       }
     } catch (error) {
       if (error.code) {

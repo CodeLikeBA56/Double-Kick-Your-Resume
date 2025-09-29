@@ -4,6 +4,7 @@
   --background: #fdfdfd;
   --foreground: #171717;
   --text-color: #333333;
+  --secondary-text-color: #555;
   --main-color: #754ef9;
   --white-color: #fdfdfd;
   --border-color: rgba(0, 0, 0, .2);
@@ -14,6 +15,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-text-color: var(--text-color);
+  --color-secondary-text-color: var(--secondary-text-color);
   --color-main-color: var(--main-color);
   --color-white-color: var(--white-color);
   --color-border-color: var(--border-color);
@@ -133,7 +135,7 @@ input:focus, textarea:focus {
   font-weight: 500;
   height: 20px;
   visibility: visible;
-  color: var(--border-color);
+  color: var(--secondary-text-color);
   transition: opacity .3s ease;
 }
 
