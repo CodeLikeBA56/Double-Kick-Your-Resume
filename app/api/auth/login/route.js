@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-import { auth, db } from "@/lib/firebaseAdmin";
+import { auth, firestore_db } from "@/lib/firebaseAdmin";
 
 export async function POST(req) {
   const { email, password } = await req.json();
@@ -15,7 +15,7 @@ export async function POST(req) {
     if (!userRecord.emailVerified) // Is user email verified.
       return Response.json({ type: "warning", message: "Email is not verified. Please verify your email." }, { status: 400 });
 
-    const userDoc = await db.collection("users").doc(userRecord.uid).get(); // Now fetch user profile form the Firestore.
+    const userDoc = await firestore_db.collection("users").doc(userRecord.uid).get(); // Now fetch user profile form the Firestore.
     
     if (!userDoc.exists) 
       return Response.json({ type: "error", message: "User not found in database." }, { status: 404 });
