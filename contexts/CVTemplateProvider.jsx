@@ -1,7 +1,7 @@
 "use client";
 import templateColors from "@/constants/Templates.js";
 import { createContext, useContext, useState } from "react";
-import Template1 from "@/components/CV Templates/Template-1/Template1.jsx";
+import Template1 from "@/components/CVTemplates/Template-1/Template1.jsx";
 
 const TemplateContext = createContext();
 

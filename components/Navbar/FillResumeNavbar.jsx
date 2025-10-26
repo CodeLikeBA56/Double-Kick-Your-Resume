@@ -3,31 +3,13 @@ import Link from 'next/link';
 import React,{ useState } from 'react';
 import { useCV } from '@/contexts/CVProvider';
 import { useUserProfile } from '@/contexts/UserProfileProvider';
-import FillResumeNavbarStyle from "../../app/fill-resume/fill-resume.module.css";
+import EditTemplateLayout from '../EditTemplateLayout/EditTemplateLayout';
+import FillResumeNavbarStyle from "@/app/(user)/fill-resume/fill-resume.module.css";
 
 const FillResumeNavbar = () => {
     const { targetContent } = useCV();
     const { documentName } = useUserProfile();
-    const [isLayoutModalActive, setIsLayoutModalActive] = useState(false);
-
-
-    // const downloadCV = () => {
-    //     const cv = document.getElementById("cv-preview");
-    //     if (!cv) {
-    //       console.error("CV preview element not found!");
-    //       return;
-    //     }
-
-    //     const originalTransform = cv.style.transform;
-    //     cv.style.transform = "scale(1)"; // Reset scaling
-
-    //     import("html2pdf.js").then(({ default: html2pdf }) => {
-    //       html2pdf().from(cv).save(`${documentName || "resume"}.pdf`)
-    //       .then(() => {
-    //         cv.style.transform = originalTransform;
-    //       });
-    //     });
-    // };
+    const [isLayoutModalActive, setIsLayoutModalActive] = useState(true);
     
     const downloadCV = async (e) => {
         e.target.disabled = true;
@@ -53,7 +35,7 @@ const FillResumeNavbar = () => {
     };      
     
     return (
-        <nav className="w-full h-20 flex items-center justify-between px-3 lg:px-5">
+        <nav className="w-full h-20 relative flex items-center justify-between px-3 lg:px-5">
             <div className='
                 flex items-center rounded-full bg-main-color text-white-color p-2
                 md:gap-2 md:px-4 md:py-2
@@ -69,7 +51,10 @@ const FillResumeNavbar = () => {
                 <button type='button'>
                     <span className="material-symbols-outlined">redo</span>
                 </button>
-                <button type='button'>
+                <button 
+                    type='button'
+                    onClick={() => setIsLayoutModalActive(prev => !prev)}
+                >
                     <span className={`material-symbols-outlined ${FillResumeNavbarStyle['navbar-icon']}`}>dashboard_customize</span>
                     <span className="hidden md:block text-1xl font-bold">Layout</span>
                 </button>
@@ -83,12 +68,18 @@ const FillResumeNavbar = () => {
                 </button>
             </div>
 
-            <button type="button" onClick={downloadCV}
+            <button 
+                type="button" 
+                onClick={downloadCV}
                 className='w-max bg-main-color text-white-color gap-2 p-2 rounded-full lg:px-5'
             >
                 <span className="material-symbols-outlined">download</span>
                 <span className="hidden lg:block text-1xl font-bold">Download CV</span>
             </button>
+
+            {
+                !isLayoutModalActive && <EditTemplateLayout setIsLayoutModalActive={setIsLayoutModalActive} />
+            }
         </nav>
     );
 }

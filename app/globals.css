@@ -188,3 +188,9 @@ i {
     transform: translateY(50px);
   }
 }
+
+@media screen and (max-width: 500px) {
+  .logo {
+    font-size: 30px;
+  }
+}

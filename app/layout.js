@@ -1,11 +1,14 @@
 import "./globals.css";
+import React from 'react';
 import "./globalicons.css";
+import App from "./App.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Geist, Geist_Mono } from "next/font/google";
-
 import CVProvider from "@/contexts/CVProvider";
+import AuthProvider from "@/contexts/AuthProvider";
 import TemplateProvider from "@/contexts/CVTemplateProvider";
 import UserProfileProvider from "@/contexts/UserProfileProvider";
+import NotificationProvider from '@/contexts/NotificationProvider';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,16 +26,23 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+ 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <UserProfileProvider>
-          <TemplateProvider>
-            <CVProvider>
-              {children}
-            </CVProvider>
-          </TemplateProvider>
-        </UserProfileProvider>
+        <NotificationProvider>
+          <AuthProvider>
+              <UserProfileProvider>
+                  <TemplateProvider>
+                      <CVProvider>
+                        <App >
+                          {children}
+                        </App> 
+                      </CVProvider>
+                  </TemplateProvider>
+              </UserProfileProvider>
+          </AuthProvider>
+        </NotificationProvider>
       </body>
     </html>
   );

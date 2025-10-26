@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import style from "@/app/fill-resume/fill-resume.module.css"
+import style from "@/app/(user)/fill-resume/fill-resume.module.css"
 import { useUserProfile } from '@/contexts/UserProfileProvider';
 
 const UpdateDocumentName = () => {

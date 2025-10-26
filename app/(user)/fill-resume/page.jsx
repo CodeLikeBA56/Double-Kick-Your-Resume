@@ -6,7 +6,7 @@ import FillResumeNavbar from '@/components/Navbar/FillResumeNavbar';
 import UpdateDocumentName from '@/components/UpdateDocumentName/UpdateDocumentName';
 import UpdatePersonalInformation from '@/components/UpdatePersonalInformation/UpdatePersonalInformation';
 import Accordion from '@/components/Accordion/Accordion';
-import Template1 from '@/components/CV Templates/Template-1/Template1';
+import Template1 from '@/components/CVTemplates/Template-1/Template1';
 import { useTemplate } from '@/contexts/CVTemplateProvider';
 import { useCV } from '@/contexts/CVProvider';
 

@@ -4,7 +4,17 @@ users/{userId} -> {
 
 cvs/{cvId} -> {
   userId,  // owner
-  title, summary, socialLinks, 
+  name, title, summary,
+  socialLinks: {
+    phone: "",
+    email: "",
+    github: "",
+    linkedin: "",
+    x: "",
+    facebook: "",
+    instagram: "",
+    threads: "",
+  }
   sections: {
     education: [eduId...],
     experience: [expId...],

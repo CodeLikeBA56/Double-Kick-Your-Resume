@@ -5,9 +5,12 @@ import { auth } from '@/lib/firebase';
 import React, { useState } from 'react';
 import styles from '../auth.module.css';
 import Navigation from '../../../components/Navigation';
+import { useNotification } from '@/contexts/NotificationProvider';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 const SignUp = () => {
+  const { pushNotification } = useNotification();
+
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -22,17 +25,17 @@ const SignUp = () => {
     e.preventDefault();
     
     if (!email.trim() || !username.trim() || !password.trim() || !confirmPassword.trim()) {
-      alert("Please fill in all fields.");
+      pushNotification("warning", "Please fill in all fields.");
       return;
     }
-
+    
     if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+      pushNotification("warning", "Passwords do not match.");
       return;
     }
 
     if (password.length < 7) {
-      alert("Password must be at least 7 characters long.");
+      pushNotification("Password must be at least 7 characters long.");
       return;
     }
 
@@ -52,11 +55,10 @@ const SignUp = () => {
           url: `${process.env.NEXT_PUBLIC_API_URL}sign-in/?email=${encodeURIComponent(user.email)}`, 
         });
 
-        // Display custom built alert here.
-        // const { type, message } = response.data;
+        const { type, message } = response.data;
 
-        alert("Email verification link has been sent to your mail.");
-        // showAlert("info", "Email verification link has been sent to your mail.");
+        pushNotification(type, message);
+        // pushNotification("info", "Email verification link has been sent to your mail.");
         
         setUsername("");
         setEmail("");
@@ -65,34 +67,32 @@ const SignUp = () => {
       }
     } catch (error) {
       if (error.code) {
-        // switch (error.code) {
-        //   case "auth/email-already-in-use":
-        //     showAlert("error", "This email is already in use.");
-        //     break;
-        //   case "auth/invalid-email":
-        //     showAlert("error", "Please provide a valid email.");
-        //     break;
-        //   case "auth/weak-password":
-        //     showAlert("error", "The password must be 7 characters long.");
-        //     break;
-        //   case "auth/operation-not-allowed":
-        //     showAlert("error", "This operation is not allowed.");
-        //     break;
-        //   case "auth/network-request-failed":
-        //     showAlert("error", "Please check your internet connection.");
-        //     break;
-        //   case "auth/too-many-requests":
-        //     showAlert("error", "Too many attempts. Please try again later.");
-        //     break;
-        //   default:
-        //     showAlert("error", "An unexpected error occurred. Please try again later.");
-        //     break;
-        // }
-        console.error("Error signing up:", error.response?.data?.message || error.message);
-    } else {
-        console.error("Error signing up:", error.response?.data?.message || error.message);
-        // showAlert("error", error.response?.data?.message || "An error occurred. Please try again.");
-    }
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            pushNotification("error", "This email is already in use.");
+            break;
+          case "auth/invalid-email":
+            pushNotification("error", "Please provide a valid email.");
+            break;
+          case "auth/weak-password":
+            pushNotification("error", "The password must be 7 characters long.");
+            break;
+          case "auth/operation-not-allowed":
+            pushNotification("error", "This operation is not allowed.");
+            break;
+          case "auth/network-request-failed":
+            pushNotification("error", "Please check your internet connection.");
+            break;
+          case "auth/too-many-requests":
+            pushNotification("error", "Too many attempts. Please try again later.");
+            break;
+          default:
+            pushNotification("error", "An unexpected error occurred. Please try again later.");
+            break;
+        }
+      } else {
+        pushNotification("error", error.response?.data?.message || "An error occurred. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }

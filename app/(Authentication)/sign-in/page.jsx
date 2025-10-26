@@ -1,11 +1,20 @@
 "use client";
 import axios from 'axios';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import { auth } from '@/lib/firebase';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from '../auth.module.css';
 import Navigation from '../../../components/Navigation';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useAuthContext } from '@/contexts/AuthProvider';
+import { useNotification } from '@/contexts/NotificationProvider';
 
 const SignIn = () => {
+  const Router = useRouter();
+  const { setUserInfo } = useAuthContext();
+  const{ pushNotification } = useNotification();
+  
   const [email, setEmail] = useState("211400068@gift.edu.pk");
   const [password, setPassword] = useState("1234567");
 
@@ -16,29 +25,43 @@ const SignIn = () => {
     e.preventDefault();
     
     if (!email.trim() || !password.trim()) {
-      alert("Please fill in all fields.");
+      pushNotification("warning", "Please fill in all fields.");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const response = await axios.post('/api/auth/login', {  uid: user.uid, email });
       
       if (200 === response.status) {
         const { type, message, user } = response.data;
         console.log(type, message);
-        console.table(user);
-
-        alert("Logged in successfylly.");
-        // showAlert("info", "Email verification link has been sent to your mail.");
-
+        
+        pushNotification(type, message);
+        
+        setUserInfo(user);
+        
+        Router.push("/fill-resume");
         setEmail("");
         setPassword("");
       }
     } catch (error) {
-      const { type, message } = error.response.data;
-      console.log(type, message);
+      if (error.code) {
+        switch (error.code) {
+          case "auth/invalid-credential":
+            pushNotification("error", "This email or password is incorrect.");
+            break;
+          default:
+            pushNotification("error", "An unexpected error occurred. Please try again later.");
+            break;
+        }
+      } else {
+        pushNotification("error", error.response?.data?.message || "An error occurred. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
